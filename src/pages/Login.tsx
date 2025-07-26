@@ -7,7 +7,8 @@ import Cookies from "js-cookie";
 import "../styles/App.css";
 
 import data from "../assets/test.json";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 interface LoginProps {
   jwtToken: string;
@@ -19,6 +20,15 @@ function Login(props: LoginProps) {
     name: string;
     score: number;
   }
+
+
+  useEffect(() => {
+    if (props.jwtToken !== "") {
+      navigate("/lists")
+    }
+  }, [])
+
+  const navigate = useNavigate()
 
   const testList: Entry[] = data.lists[0].entries;
 
@@ -66,6 +76,7 @@ function Login(props: LoginProps) {
         console.log(data);
         props.setJwtToken(data.token);
         Cookies.set("jwtToken", data.token);
+        navigate("/lists")
       });
   }
 

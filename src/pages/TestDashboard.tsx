@@ -8,7 +8,7 @@ interface TestDashboardProps {
     statusCode: number,
     navigate: (path: string) => void,
   ) => void;
-  SignOut: (
+  signOut: (
     navigate: (path: string) => void,
   ) => void;
 }
@@ -37,7 +37,7 @@ function TestDashboard(props: TestDashboardProps) {
       <p>this is the test dashboard</p>
       <button onClick={testRequest2} className="w-10 h-10 border-2"></button>
       <button onClick={() => {navigate("/login")}} className="w-10 h-10 border-2"></button>
-      <button onClick={() => {props.SignOut(navigate)}} className="w-10 h-10 border-2"></button>
+      <button onClick={() => {props.signOut(navigate)}} className="w-10 h-10 border-2"></button>
     </div>
   );
 }
