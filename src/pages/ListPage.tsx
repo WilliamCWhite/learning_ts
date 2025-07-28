@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
+import List from '../components/List'
+import type { DBList } from "../utils/interfaces";
 
 interface ListPageProps {
   jwtToken: string;
@@ -11,12 +13,6 @@ interface ListPageProps {
   signOut: (navigate: (path: string) => void) => void;
 }
 
-interface DBList {
-  list_id: number;
-  title: string;
-  time_created: Date;
-  time_modified: Date;
-}
 
 function ListPage(props: ListPageProps) {
   const navigate = useNavigate();
@@ -32,7 +28,7 @@ function ListPage(props: ListPageProps) {
   }, [])
 
   const componentList = lists.map((list: DBList, index: number) => {
-    return <div key={index}>{`name: ${list.title} timeModified: ${list.time_modified} timeCreated: ${list.time_created}`}</div>
+    return <List key={index} dbList={list} stateIndex={index} deleteList={deleteList} editList={editList}/>
   })
 
   async function getLists(): Promise<DBList[]> {
@@ -51,6 +47,79 @@ function ListPage(props: ListPageProps) {
     }
   }
 
+  async function createList() {
+    console.log("button log")
+    try {
+      const response = await fetch("http://localhost:7070/api/lists", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${props.jwtToken}`},
+        body: JSON.stringify({
+          title: "test list"
+        })
+      })
+      props.handleJwtFailure(response.status, navigate)
+      const data = await response.json() as DBList
+      console.log(data)
+      
+      const newLists = [data, ...lists]
+      setLists(newLists)
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function editList(listID: number, stateIndex: number) {
+    try {
+      const response = await fetch("http://localhost:7070/api/lists", {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${props.jwtToken}`},
+        body: JSON.stringify({
+          title: "edited list",
+          list_id: listID
+        })
+      })
+      props.handleJwtFailure(response.status, navigate)
+      const updatedList: DBList = {
+        title: "edited list",
+        time_modified: new Date(),
+        list_id: lists[stateIndex].list_id,
+        time_created: lists[stateIndex].time_created
+      }
+
+      const newLists = [
+        ...lists.slice(0, stateIndex),
+        updatedList,
+        ...lists.slice(stateIndex+1)
+      ]
+      setLists(newLists)
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function deleteList(listID: number, stateIndex: number) {
+    try {
+      const response = await fetch("http://localhost:7070/api/lists", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${props.jwtToken}`},
+        body: JSON.stringify({
+          list_id: listID
+        })
+      })
+      props.handleJwtFailure(response.status, navigate)
+      const newLists = [
+        ...lists.slice(0, stateIndex),
+        ...lists.slice(stateIndex+1)
+      ]
+      setLists(newLists)
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className="w-screen h-screen flex justify-center itesm-center bg-white">
       <main className="w-5xl h-full my-16 bg-gray-100">
@@ -62,6 +131,8 @@ function ListPage(props: ListPageProps) {
           }}
           className="w-10 h-10 border-2"
         ></button>
+        <button onClick={createList} className="w-10 h-10 border-2"></button>
+
         {componentList}
       </main>
     </div>
