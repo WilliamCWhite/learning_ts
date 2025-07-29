@@ -12,3 +12,12 @@ export interface DBEntry {
   time_created: Date;
   time_modified: Date;
 }
+
+export interface FetchParams {
+  jwtToken: string;
+  handleJwtFailure: (
+    statusCode: number,
+    navigate: (path: string) => void,
+  ) => void;
+  navigate: (path: string) => void
+}

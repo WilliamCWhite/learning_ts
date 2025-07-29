@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import type { DBEntry } from "../utils/interfaces";
+import type { DBEntry, FetchParams } from "../utils/interfaces";
 import Entry from "../components/Entry";
+import { entryDelete, entryPost, entryPut } from "../utils/entryRequests";
 
 interface EntryProps {
   jwtToken: string;
@@ -17,6 +18,12 @@ interface EntryProps {
 
 function EntryPage(props: EntryProps) {
   const navigate = useNavigate();
+
+  const fetchParams: FetchParams = {
+    jwtToken: props.jwtToken,
+    handleJwtFailure: props.handleJwtFailure,
+    navigate: navigate
+  }
 
   const [entries, setEntries] = useState<DBEntry[]>([]);
 
@@ -66,23 +73,13 @@ function EntryPage(props: EntryProps) {
   }
 
   async function createEntry() {
+    const entry: Partial<DBEntry> = {
+      name: "function made entry",
+      score: 0
+    }
     try {
-      const response = await fetch(
-        `http://localhost:7070/api/entries/${props.selectedListID}`,
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${props.jwtToken}` },
-          body: JSON.stringify({
-            name: "created entry",
-            score: 0,
-          }),
-        },
-      );
-      props.handleJwtFailure(response.status, navigate);
-      const data = (await response.json()) as DBEntry;
-      console.log(data);
-
-      const newEntries = [data, ...entries];
+      const newEntry = await entryPost(fetchParams, props.selectedListID, entry)
+      const newEntries = [newEntry, ...entries];
       setEntries(newEntries);
     } catch (error) {
       console.error(error);
@@ -90,27 +87,13 @@ function EntryPage(props: EntryProps) {
   }
 
   async function editEntry(entryID: number, stateIndex: number) {
+    console.log(entryID)
+    const updatedEntry: DBEntry = entries[stateIndex]
+    updatedEntry.name = "newly updated"
+    updatedEntry.score = 8
+    updatedEntry.time_modified = new Date()
     try {
-      const response = await fetch(
-        `http://localhost:7070/api/entries/${props.selectedListID}`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${props.jwtToken}` },
-          body: JSON.stringify({
-            entry_id: entryID,
-            name: "edited entry",
-            score: 5,
-          }),
-        },
-      );
-      props.handleJwtFailure(response.status, navigate);
-      const updatedEntry: DBEntry = {
-        name: "edited entry",
-        score: 5,
-        time_modified: new Date(),
-        entry_id: entries[stateIndex].entry_id,
-        time_created: entries[stateIndex].time_created,
-      };
+      await entryPut(fetchParams, props.selectedListID, updatedEntry)
 
       const newEntries = [
         ...entries.slice(0, stateIndex),
@@ -125,17 +108,8 @@ function EntryPage(props: EntryProps) {
 
   async function deleteEntry(entryID: number, stateIndex: number) {
     try {
-      const response = await fetch(
-        `http://localhost:7070/api/entries/${props.selectedListID}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${props.jwtToken}` },
-          body: JSON.stringify({
-            entry_id: entryID,
-          }),
-        },
-      );
-      props.handleJwtFailure(response.status, navigate);
+      await entryDelete(fetchParams, props.selectedListID, entryID)
+
       const newEntries = [
         ...entries.slice(0, stateIndex),
         ...entries.slice(stateIndex + 1),
