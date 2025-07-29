@@ -85,6 +85,7 @@ function Login(props: LoginProps) {
           ></button>
           <Link to="/about">About</Link>
           <Link to="/dashboard">Dashboard</Link>
+          <div></div>
         </main>
       </div>
     </GoogleOAuthProvider>

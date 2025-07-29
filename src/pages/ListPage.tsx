@@ -41,7 +41,7 @@ function ListPage(props: ListPageProps) {
 
   async function createList() {
     const list: Partial<DBList> = {
-      title: "hello"
+      title: "Untitled List"
     }
     try {
       const newList = await listPost(fetchParams, list)
@@ -53,10 +53,7 @@ function ListPage(props: ListPageProps) {
     }
   }
 
-  async function editList(listID: number, stateIndex: number) {
-    console.log(listID)
-    const updatedList: DBList = lists[stateIndex]
-    updatedList.title = "newly updated"
+  async function editList(updatedList: DBList, stateIndex: number) {
     updatedList.time_modified = new Date()
     try {
       await listPut(fetchParams, updatedList)

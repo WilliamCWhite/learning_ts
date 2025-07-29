@@ -74,7 +74,7 @@ function EntryPage(props: EntryProps) {
 
   async function createEntry() {
     const entry: Partial<DBEntry> = {
-      name: "function made entry",
+      name: "Unnamed Entry",
       score: 0
     }
     try {
@@ -86,11 +86,7 @@ function EntryPage(props: EntryProps) {
     }
   }
 
-  async function editEntry(entryID: number, stateIndex: number) {
-    console.log(entryID)
-    const updatedEntry: DBEntry = entries[stateIndex]
-    updatedEntry.name = "newly updated"
-    updatedEntry.score = 8
+  async function editEntry(updatedEntry: DBEntry, stateIndex: number) {
     updatedEntry.time_modified = new Date()
     try {
       await entryPut(fetchParams, props.selectedListID, updatedEntry)
