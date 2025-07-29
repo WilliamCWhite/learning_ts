@@ -1,12 +1,10 @@
 import Header from "../components/Header.tsx";
-import Entry from "../components/Entry.tsx";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import type { CredentialResponse } from "@react-oauth/google";
 import Cookies from "js-cookie";
 
 import "../styles/App.css";
 
-import data from "../assets/test.json";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -16,11 +14,6 @@ interface LoginProps {
 }
 
 function Login(props: LoginProps) {
-  interface Entry {
-    name: string;
-    score: number;
-  }
-
 
   useEffect(() => {
     if (props.jwtToken !== "") {
@@ -30,11 +23,6 @@ function Login(props: LoginProps) {
 
   const navigate = useNavigate()
 
-  const testList: Entry[] = data.lists[0].entries;
-
-  const componentList = testList.map((entry: Entry, index: number) => {
-    return <Entry key={index} name={entry.name} score={entry.score} />;
-  });
 
   function testRequest(): void {
     console.log("Initializing testRequest");
@@ -85,7 +73,6 @@ function Login(props: LoginProps) {
       <div className="w-screen h-screen flex justify-center items-center bg-white">
         <main className="w-5xl h-full my-16 bg-gray-100">
           <Header />
-          <section className="flex flex-col w-full">{componentList}</section>
           <GoogleLogin 
             onSuccess={getCredentials}
             onError={() => {

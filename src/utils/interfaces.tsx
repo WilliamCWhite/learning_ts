@@ -4,3 +4,11 @@ export interface DBList {
   time_created: Date;
   time_modified: Date;
 }
+
+export interface DBEntry {
+  entry_id: number;
+  name: string;
+  score: number;
+  time_created: Date;
+  time_modified: Date;
+}

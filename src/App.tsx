@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import TestDashboard from "./pages/TestDashboard.tsx";
 import Cookies from "js-cookie";
 import ListPage from "./pages/ListPage.tsx";
+import EntryPage from "./pages/EntryPage.tsx";
 
 function App() {
   const [jwtToken, setJwtToken] = useState<string>(() => {
@@ -14,8 +15,19 @@ function App() {
     }
     return cookieJwt;
   });
+  const [selectedListID, setSelectedListID] = useState<number>(-1);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(selectedListID)
+    if (selectedListID !== -1) {
+      navigate("/entries");
+    }
+    else {
+      navigate("/lists")
+    }
+  }, [selectedListID]);
 
   function handleJwtFailure(
     statusCode: number,
@@ -32,6 +44,7 @@ function App() {
   }
 
   function signOut(navigate: (path: string) => void) {
+    setSelectedListID(-1)
     setJwtToken("");
     Cookies.set("jwtToken", "");
     navigate("/login");
@@ -63,7 +76,24 @@ function App() {
         <Route
           path="/lists"
           element={
-            <ListPage jwtToken={jwtToken} handleJwtFailure={handleJwtFailure} signOut={signOut}/>
+            <ListPage
+              jwtToken={jwtToken}
+              handleJwtFailure={handleJwtFailure}
+              signOut={signOut}
+              setSelectedListID={setSelectedListID}
+            />
+          }
+        />
+        <Route
+          path="/entries"
+          element={
+            <EntryPage
+              jwtToken={jwtToken}
+              handleJwtFailure={handleJwtFailure}
+              signOut={signOut}
+              setSelectedListID={setSelectedListID}
+              selectedListID={selectedListID}
+            />
           }
         />
       </Routes>

@@ -5,6 +5,7 @@ type ListProps = {
   stateIndex: number,
   deleteList: (listID: number, stateIndex: number) => Promise<void>
   editList: (listID: number, stateIndex: number) => Promise<void>
+  setSelectedListID: any
 }
 
 function List(props: ListProps) {
@@ -23,6 +24,7 @@ function List(props: ListProps) {
       <p>{props.dbList.title} {newTimeModified.toISOString()}</p>
       <button onClick={() => {props.deleteList(props.dbList.list_id, props.stateIndex)}}>DELETE</button>
       <button onClick={() => {props.editList(props.dbList.list_id, props.stateIndex)}}>EDIT</button>
+      <button onClick={() => {props.setSelectedListID(props.dbList.list_id)}}>SELECT</button>
     </div>
   )
 }

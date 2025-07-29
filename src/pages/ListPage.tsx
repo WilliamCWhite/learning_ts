@@ -11,6 +11,7 @@ interface ListPageProps {
     navigate: (path: string) => void,
   ) => void;
   signOut: (navigate: (path: string) => void) => void;
+  setSelectedListID: any;
 }
 
 
@@ -28,7 +29,7 @@ function ListPage(props: ListPageProps) {
   }, [])
 
   const componentList = lists.map((list: DBList, index: number) => {
-    return <List key={index} dbList={list} stateIndex={index} deleteList={deleteList} editList={editList}/>
+    return <List key={index} dbList={list} stateIndex={index} deleteList={deleteList} editList={editList} setSelectedListID={props.setSelectedListID}/>
   })
 
   async function getLists(): Promise<DBList[]> {
@@ -121,7 +122,7 @@ function ListPage(props: ListPageProps) {
   }
 
   return (
-    <div className="w-screen h-screen flex justify-center itesm-center bg-white">
+    <div className="w-screen h-screen flex justify-center items-center bg-white">
       <main className="w-5xl h-full my-16 bg-gray-100">
         <Header />
         <section className="flex w-full"></section>
