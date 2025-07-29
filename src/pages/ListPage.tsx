@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useEffect, useState, type ChangeEvent } from "react";
-import List from '../components/List'
+import List from "../components/List";
 import type { DBList, FetchParams } from "../utils/interfaces";
 import { listGet, listPost, listPut, listDelete } from "../utils/listRequests";
-import { sortDBLists } from "../utils/misc";
+import { sortDBLists } from "../utils/sorting";
 
 interface ListPageProps {
   jwtToken: string;
@@ -16,90 +16,92 @@ interface ListPageProps {
   setSelectedListID: any;
 }
 
-
 function ListPage(props: ListPageProps) {
   const navigate = useNavigate();
 
   const fetchParams: FetchParams = {
     jwtToken: props.jwtToken,
     handleJwtFailure: props.handleJwtFailure,
-    navigate: navigate
-  }
+    navigate: navigate,
+  };
 
   const [lists, setLists] = useState<DBList[]>([]);
-  const [sortMethod, setSortMethod] = useState<string>("time_modified-ASC")
+  const [sortMethod, setSortMethod] = useState<string>("time_modified-DESC");
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedLists = await listGet(fetchParams)
-      sortAndSetLists(fetchedLists)
-    }
-    fetchData()
-  }, [])
+      const fetchedLists = await listGet(fetchParams);
+      sortAndSetLists(fetchedLists);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
-    sortAndSetLists([...lists])
-  }, [sortMethod])
+    sortAndSetLists([...lists]);
+  }, [sortMethod]);
 
   const componentList = lists.map((list: DBList, index: number) => {
-    return <List key={index} dbList={list} stateIndex={index} deleteList={deleteList} editList={editList} setSelectedListID={props.setSelectedListID}/>
-  })
-
+    return (
+      <List
+        key={index}
+        dbList={list}
+        stateIndex={index}
+        deleteList={deleteList}
+        editList={editList}
+        setSelectedListID={props.setSelectedListID}
+      />
+    );
+  });
 
   function sortAndSetLists(listsDupe: DBList[]) {
-    console.log(listsDupe)
-    sortDBLists(listsDupe, sortMethod)
-    console.log(listsDupe)
-    setLists(listsDupe)
+    sortDBLists(listsDupe, sortMethod);
+    setLists(listsDupe);
   }
 
   async function createList() {
     const list: Partial<DBList> = {
-      title: "Untitled List"
-    }
+      title: "Untitled List",
+    };
     try {
-      const newList = await listPost(fetchParams, list)
-      const newLists = [newList, ...lists]
-      sortAndSetLists(newLists)
-    }
-    catch (error) {
-      console.error(error)
+      const newList = await listPost(fetchParams, list);
+      const newLists = [newList, ...lists];
+      sortAndSetLists(newLists);
+    } catch (error) {
+      console.error(error);
     }
   }
 
   async function editList(updatedList: DBList, stateIndex: number) {
-    updatedList.time_modified = new Date()
+    updatedList.time_modified = new Date();
     try {
-      await listPut(fetchParams, updatedList)
+      await listPut(fetchParams, updatedList);
 
       const newLists = [
         ...lists.slice(0, stateIndex),
         updatedList,
-        ...lists.slice(stateIndex+1)
-      ]
-      sortAndSetLists(newLists)
-    }
-    catch (error) {
-      console.error(error)
+        ...lists.slice(stateIndex + 1),
+      ];
+      sortAndSetLists(newLists);
+    } catch (error) {
+      console.error(error);
     }
   }
 
   async function deleteList(listID: number, stateIndex: number) {
     try {
-      await listDelete(fetchParams, listID)
+      await listDelete(fetchParams, listID);
       const newLists = [
         ...lists.slice(0, stateIndex),
-        ...lists.slice(stateIndex+1)
-      ]
-      sortAndSetLists(newLists)
-    }
-    catch (error) {
-      console.error(error)
+        ...lists.slice(stateIndex + 1),
+      ];
+      sortAndSetLists(newLists);
+    } catch (error) {
+      console.error(error);
     }
   }
 
   function handleSortMethodChange(event: ChangeEvent<HTMLSelectElement>) {
-    setSortMethod(event.target.value)
+    setSortMethod(event.target.value);
   }
 
   return (

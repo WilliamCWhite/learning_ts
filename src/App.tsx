@@ -25,7 +25,12 @@ function App() {
       navigate("/entries");
     }
     else {
-      navigate("/lists")
+      if (jwtToken !== "") {
+        navigate("/lists")
+      }
+      else {
+        navigate("/login")
+      }
     }
   }, [selectedListID]);
 
@@ -39,6 +44,7 @@ function App() {
 
     setJwtToken("");
     Cookies.set("jwtToken", "");
+    setSelectedListID(-1)
     navigate("/login");
     throw new Error("unauthorized");
   }

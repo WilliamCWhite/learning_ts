@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 import type { DBEntry } from "../utils/interfaces";
 import { isIntegerString } from "../utils/misc";
 interface EntryProps {
@@ -11,6 +11,14 @@ interface EntryProps {
 function Entry(props: EntryProps) {
   const [entryName, setEntryName] = useState<string>(props.dbEntry.name);
   const [entryScore, setEntryScore] = useState<string>(String(props.dbEntry.score));
+
+  useEffect(() => {
+    setEntryName(props.dbEntry.name)
+  }, [props.dbEntry.name])
+
+  useEffect(() => {
+    setEntryScore(String(props.dbEntry.score))
+  }, [props.dbEntry.score])
 
   function handleNameChange(event: ChangeEvent<HTMLInputElement>) {
     setEntryName(event.target.value);
