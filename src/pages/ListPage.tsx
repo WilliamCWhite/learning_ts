@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import List from '../components/List'
 import type { DBList, FetchParams } from "../utils/interfaces";
 import { listGet, listPost, listPut, listDelete } from "../utils/listRequests";
+import { sortDBLists } from "../utils/misc";
 
 interface ListPageProps {
   jwtToken: string;
@@ -26,18 +27,31 @@ function ListPage(props: ListPageProps) {
   }
 
   const [lists, setLists] = useState<DBList[]>([]);
+  const [sortMethod, setSortMethod] = useState<string>("time_modified-ASC")
 
   useEffect(() => {
     const fetchData = async () => {
       const fetchedLists = await listGet(fetchParams)
-      setLists(fetchedLists)
+      sortAndSetLists(fetchedLists)
     }
     fetchData()
   }, [])
 
+  useEffect(() => {
+    sortAndSetLists([...lists])
+  }, [sortMethod])
+
   const componentList = lists.map((list: DBList, index: number) => {
     return <List key={index} dbList={list} stateIndex={index} deleteList={deleteList} editList={editList} setSelectedListID={props.setSelectedListID}/>
   })
+
+
+  function sortAndSetLists(listsDupe: DBList[]) {
+    console.log(listsDupe)
+    sortDBLists(listsDupe, sortMethod)
+    console.log(listsDupe)
+    setLists(listsDupe)
+  }
 
   async function createList() {
     const list: Partial<DBList> = {
@@ -46,7 +60,7 @@ function ListPage(props: ListPageProps) {
     try {
       const newList = await listPost(fetchParams, list)
       const newLists = [newList, ...lists]
-      setLists(newLists)
+      sortAndSetLists(newLists)
     }
     catch (error) {
       console.error(error)
@@ -63,7 +77,7 @@ function ListPage(props: ListPageProps) {
         updatedList,
         ...lists.slice(stateIndex+1)
       ]
-      setLists(newLists)
+      sortAndSetLists(newLists)
     }
     catch (error) {
       console.error(error)
@@ -77,11 +91,15 @@ function ListPage(props: ListPageProps) {
         ...lists.slice(0, stateIndex),
         ...lists.slice(stateIndex+1)
       ]
-      setLists(newLists)
+      sortAndSetLists(newLists)
     }
     catch (error) {
       console.error(error)
     }
+  }
+
+  function handleSortMethodChange(event: ChangeEvent<HTMLSelectElement>) {
+    setSortMethod(event.target.value)
   }
 
   return (
@@ -96,6 +114,14 @@ function ListPage(props: ListPageProps) {
           className="w-10 h-10 border-2"
         ></button>
         <button onClick={createList} className="w-10 h-10 border-2"></button>
+        <select defaultValue={sortMethod} onChange={handleSortMethodChange}>
+          <option value="time_modified-DESC">Time Modified (new to old)</option>
+          <option value="time_modified-ASC">Time Modified (old to new)</option>
+          <option value="time_created-DESC">Time Created (new to old)</option>
+          <option value="time_created-ASC">Time Created (old to new)</option>
+          <option value="title-ASC">Title (A to Z)</option>
+          <option value="title-DESC">Title (Z to A)</option>
+        </select>
 
         {componentList}
       </main>

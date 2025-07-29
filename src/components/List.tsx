@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { DBList } from "../utils/interfaces";
 import type { ChangeEvent } from "react";
 
@@ -12,6 +12,11 @@ type ListProps = {
 
 function List(props: ListProps) {
   const [listTitle, setListTitle] = useState<string>(props.dbList.title);
+  
+
+  useEffect(() => {
+    setListTitle(props.dbList.title)
+  }, [props.dbList.title])
 
   // HACK: Very annoying to sync client side and server side date formats otherwise
   let newTimeModified: Date;
