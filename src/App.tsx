@@ -1,8 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
-import About from "./pages/About.tsx";
 import Login from "./pages/Login.tsx";
 import { useEffect, useState } from "react";
-import TestDashboard from "./pages/TestDashboard.tsx";
 import Cookies from "js-cookie";
 import ListPage from "./pages/ListPage.tsx";
 import EntryPage from "./pages/EntryPage.tsx";
@@ -61,24 +59,12 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={<Login jwtToken={jwtToken} setJwtToken={setJwtToken} />}
+          element={<Login jwtToken={jwtToken} setJwtToken={setJwtToken} signOut={signOut}/>}
         />
         <Route
           path="/"
-          element={<Login jwtToken={jwtToken} setJwtToken={setJwtToken} />}
+          element={<Login jwtToken={jwtToken} setJwtToken={setJwtToken} signOut={signOut}/>}
         />
-        <Route
-          path="/dashboard"
-          element={
-            <TestDashboard
-              jwtToken={jwtToken}
-              setJwtToken={setJwtToken}
-              handleJwtFailure={handleJwtFailure}
-              signOut={signOut}
-            />
-          }
-        />
-        <Route path="/about" element={<About />} />
         <Route
           path="/lists"
           element={

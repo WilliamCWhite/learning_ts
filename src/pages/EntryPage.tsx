@@ -5,8 +5,9 @@ import type { DBEntry, FetchParams } from "../utils/interfaces";
 import Entry from "../components/Entry";
 import { entryDelete, entryGet, entryPost, entryPut } from "../utils/entryRequests";
 import { sortDBEntries } from "../utils/sorting";
+import EntryPageNavbar from "../components/EntryPageNavbar";
 
-interface EntryProps {
+interface EntryPageProps {
   jwtToken: string;
   handleJwtFailure: (
     statusCode: number,
@@ -17,7 +18,7 @@ interface EntryProps {
   selectedListID: number;
 }
 
-function EntryPage(props: EntryProps) {
+function EntryPage(props: EntryPageProps) {
   const navigate = useNavigate();
 
   const fetchParams: FetchParams = {
@@ -113,34 +114,18 @@ function EntryPage(props: EntryProps) {
     setSortMethod(event.target.value);
   }
 
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  let mobileBasedClass = ""
+  if (!isMobile) mobileBasedClass = "scrollbar-thin"
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-white">
-      <main className="w-5xl h-full my-16 bg-gray-100">
-        <Header />
-        <button
-          onClick={() => {
-            props.signOut(navigate);
-          }}
-          className="w-10 h-10 border-2"
-        ></button>
-        <button onClick={goBack} className="w-10 h-10 border-2">
-          Back
-        </button>
-        <button onClick={createEntry} className="w-10 h-10 border-2">
-          Create
-        </button>
-        <select defaultValue={sortMethod} onChange={handleSortMethodChange}>
-          <option value="time_modified-DESC">Time Modified (new to old)</option>
-          <option value="time_modified-ASC">Time Modified (old to new)</option>
-          <option value="time_created-DESC">Time Created (new to old)</option>
-          <option value="time_created-ASC">Time Created (old to new)</option>
-          <option value="name-ASC">Title (A to Z)</option>
-          <option value="name-DESC">Title (Z to A)</option>
-          <option value="score-DESC">Score (High to Low)</option>
-          <option value="score-ASC">Score (Low to High)</option>
-        </select>
-        <p>selectedListID: {props.selectedListID}</p>
-        {componentList}
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-200">
+      <Header signOut={() => props.signOut(navigate)} useSignOut={true}/>
+      <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">
+        <EntryPageNavbar createEntry={createEntry} goBack={goBack} sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>
+        <section className={`overflow-scroll w-full px-2 ${mobileBasedClass}`}>
+          {componentList}
+        </section>
       </main>
     </div>
   );

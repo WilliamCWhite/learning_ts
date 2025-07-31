@@ -11,6 +11,7 @@ import { useEffect } from "react";
 interface LoginProps {
   jwtToken: string;
   setJwtToken: any;
+  signOut: (navigate: (path: string) => void) => void;
 }
 
 function Login(props: LoginProps) {
@@ -72,7 +73,7 @@ function Login(props: LoginProps) {
     <GoogleOAuthProvider clientId="934499925133-rfv5i2cqavmutiedelnh1o7tu6l1lvdj.apps.googleusercontent.com">
       <div className="w-screen h-screen flex justify-center items-center bg-white">
         <main className="w-5xl h-full my-16 bg-gray-100">
-          <Header />
+          <Header signOut={() => props.signOut(navigate)} useSignOut={false}/>
           <GoogleLogin 
             onSuccess={getCredentials}
             onError={() => {

@@ -5,6 +5,7 @@ import List from "../components/List";
 import type { DBList, FetchParams } from "../utils/interfaces";
 import { listGet, listPost, listPut, listDelete } from "../utils/listRequests";
 import { sortDBLists } from "../utils/sorting";
+import ListPageNavbar from "../components/ListPageNavbar";
 
 interface ListPageProps {
   jwtToken: string;
@@ -104,28 +105,18 @@ function ListPage(props: ListPageProps) {
     setSortMethod(event.target.value);
   }
 
-  return (
-    <div className="w-screen h-screen flex justify-center items-center bg-white">
-      <main className="w-5xl h-full my-16 bg-gray-100">
-        <Header />
-        <section className="flex w-full"></section>
-        <button
-          onClick={() => {
-            props.signOut(navigate);
-          }}
-          className="w-10 h-10 border-2"
-        ></button>
-        <button onClick={createList} className="w-10 h-10 border-2"></button>
-        <select defaultValue={sortMethod} onChange={handleSortMethodChange}>
-          <option value="time_modified-DESC">Time Modified (new to old)</option>
-          <option value="time_modified-ASC">Time Modified (old to new)</option>
-          <option value="time_created-DESC">Time Created (new to old)</option>
-          <option value="time_created-ASC">Time Created (old to new)</option>
-          <option value="title-ASC">Title (A to Z)</option>
-          <option value="title-DESC">Title (Z to A)</option>
-        </select>
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  let mobileBasedClass = ""
+  if (!isMobile) mobileBasedClass = "scrollbar-thin"
 
-        {componentList}
+  return (
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-200">
+      <Header signOut={() => props.signOut(navigate)} useSignOut={true}/>
+      <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">
+        <ListPageNavbar createList={createList} sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>
+        <section className={`overflow-scroll w-full px-2 ${mobileBasedClass}`}>
+          {componentList}
+        </section>
       </main>
     </div>
   );
