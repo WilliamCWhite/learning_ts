@@ -114,7 +114,7 @@ function ListPage(props: ListPageProps) {
       <Header signOut={() => props.signOut(navigate)} useSignOut={true}/>
       <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">
         <ListPageNavbar createList={createList} sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>
-        <section className={`overflow-scroll w-full px-2 ${mobileBasedClass}`}>
+        <section className={`overflow-scroll w-full px-2 flex flex-col justify-between items-center gap-4 ${mobileBasedClass}`}>
           {componentList}
         </section>
       </main>

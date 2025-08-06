@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./pages/Login.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ListPage from "./pages/ListPage.tsx";
@@ -59,11 +59,11 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={<Login jwtToken={jwtToken} setJwtToken={setJwtToken} signOut={signOut}/>}
+          element={<LoginPage jwtToken={jwtToken} setJwtToken={setJwtToken} signOut={signOut}/>}
         />
         <Route
           path="/"
-          element={<Login jwtToken={jwtToken} setJwtToken={setJwtToken} signOut={signOut}/>}
+          element={<LoginPage jwtToken={jwtToken} setJwtToken={setJwtToken} signOut={signOut}/>}
         />
         <Route
           path="/lists"

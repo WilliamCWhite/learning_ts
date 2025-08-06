@@ -77,7 +77,7 @@ function Entry(props: EntryProps) {
         </button>
         <div className="flex w-full h-14 items-center">
           <input
-            className="text-lg xs:text-xl w-full h-fit overflow-ellipsis outline-0"
+            className="text-lg xs:text-xl w-full h-fit overflow-ellipsis outline-0 px-2 rounded-xl focus:bg-gray-200"
             type="text"
             value={entryName}
             onChange={handleNameChange}

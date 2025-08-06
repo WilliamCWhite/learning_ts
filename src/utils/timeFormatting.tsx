@@ -1,6 +1,6 @@
 import { DateTime, Interval } from 'luxon'
 
-export function formatTimeModified(timeModifiedString: string): string {
+export function generateRelativeTimeString(timeModifiedString: string): string {
     const timeModified = DateTime.fromISO(timeModifiedString);
     const timeNow = DateTime.now();
     
