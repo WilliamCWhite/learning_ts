@@ -21,7 +21,7 @@ function ListPageNavbar(props: ListPageNavbarProps) {
         <div className="relative bg-gray-200 text-gray-400 w-20 max-w-30 h-full rounded-2xl flex justify-center items-center grow hover:bg-blue-100 active:bg-blue-200 active:text-blue-400">
           <Icon iconName="filter" classes="w-7 h-7" />
           <select
-            className="absolute opacity-0 w-full h-full"
+            className="absolute opacity-0 w-full h-full text-slate-900"
             defaultValue={props.sortMethod}
             onChange={props.handleSortMethodChange}
           >

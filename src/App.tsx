@@ -18,7 +18,6 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(selectedListID)
     if (selectedListID !== -1) {
       navigate("/entries");
     }
