@@ -1,11 +1,11 @@
 import Header from "../components/Header.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import "../styles/App.css";
-
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import LoginButton from "../components/LoginButton.tsx";
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 interface LoginPageProps {
   jwtToken: string;
@@ -23,7 +23,7 @@ function LoginPage(props: LoginPageProps) {
   const navigate = useNavigate();
 
   return (
-    <GoogleOAuthProvider clientId="934499925133-rfv5i2cqavmutiedelnh1o7tu6l1lvdj.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-200">
         <Header signOut={() => props.signOut(navigate)} useSignOut={false} />
         <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">

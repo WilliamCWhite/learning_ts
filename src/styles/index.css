@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-rubik: 'Rubik', sans-serif;
-  --font-rmo: 'Rubik Mono One', monospace;
+  --font-rubik: "Rubik", sans-serif;
 }
 
 @layer utilities {

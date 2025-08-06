@@ -9,10 +9,12 @@ interface LoginButtonProps {
   navigateLists: any;
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function LoginButton(props: LoginButtonProps) {
   async function getCredentialsFromAccessToken(accessToken: string) {
     try {
-      const response = await fetch("http://localhost:7070/auth/google", {
+      const response = await fetch(`${API_URL}/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ access_token: accessToken }),

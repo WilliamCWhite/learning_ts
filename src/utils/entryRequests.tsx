@@ -1,6 +1,6 @@
 import type { DBEntry, FetchParams } from "./interfaces";
 
-const API_URL = "http://localhost:7070/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function entryGet(
   params: FetchParams,
