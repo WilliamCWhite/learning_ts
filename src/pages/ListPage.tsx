@@ -110,7 +110,7 @@ function ListPage(props: ListPageProps) {
   if (!isMobile) mobileBasedClass = "scrollbar-thin"
 
   return (
-    <div className="w-screen h-dvh flex flex-col justify-center items-center bg-gray-200">
+    <div className="w-full h-dvh flex flex-col justify-center items-center bg-gray-200">
       <Header signOut={() => props.signOut(navigate)} useSignOut={true}/>
       <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">
         <ListPageNavbar createList={createList} sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>
