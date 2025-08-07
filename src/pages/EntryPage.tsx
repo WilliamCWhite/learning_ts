@@ -119,7 +119,7 @@ function EntryPage(props: EntryPageProps) {
   if (!isMobile) mobileBasedClass = "scrollbar-thin"
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-200">
+    <div className="w-screen h-dvh flex flex-col justify-center items-center bg-gray-200">
       <Header signOut={() => props.signOut(navigate)} useSignOut={true}/>
       <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">
         <EntryPageNavbar createEntry={createEntry} goBack={goBack} sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>

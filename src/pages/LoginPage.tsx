@@ -24,7 +24,7 @@ function LoginPage(props: LoginPageProps) {
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-200">
+      <div className="w-screen h-dvh flex flex-col justify-center items-center bg-gray-200">
         <Header signOut={() => props.signOut(navigate)} useSignOut={false} />
         <main className="w-full h-40 grow max-w-2xl flex flex-col items-center bg-gray-100 shadow-xl">
           <section className="w-md px-2 max-w-full h-full flex flex-col justify-center items-center font-rubik text-slate-800">
